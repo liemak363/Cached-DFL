@@ -42,7 +42,7 @@ from model import CNNMnist, CNNFashion_Mnist, ResNet18
 
 from data_loader import (
     get_mnist_iid, get_mnist_area, get_mnist_dirichlet, get_mnist_non_iid,
-    get_cifar10_iid,  get_cifar10_dirichlet, get_cifar10_non_iid
+    get_cifar10_iid,  get_cifar10_dirichlet, get_cifar10_non_iid,
     get_fashionmnist_area, get_fashionmnist_iid,  get_fashionmnist_dirichlet, get_fashionmnist_non_iid
 )
 from road_sim import generate_roadNet_pair_area_list

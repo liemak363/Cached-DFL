@@ -34,7 +34,14 @@ class Car:
         self.source = source
         self.destination = destination
         self.speed_vector = get_cordinate_by_node(self.destination, self.pos_list) - get_cordinate_by_node(self.source,self.pos_list)
-        self.speed_vector = self.speed_vector/ np.linalg.norm(self.speed_vector)*speed #speed is should be a vector and the Amplitude of the vector should be a fixed value
+
+        norm = np.linalg.norm(self.speed_vector)
+        if norm == 0:
+            self.speed_vector = np.zeros_like(self.speed_vector)  # Đặt vector tốc độ về 0
+        else:
+            self.speed_vector = self.speed_vector / norm * self.speed
+        # self.speed_vector = self.speed_vector/ np.linalg.norm(self.speed_vector)*speed #speed is should be a vector and the Amplitude of the vector should be a fixed value
+
         self.current_position = get_cordinate_by_node(self.source, self.pos_list) # position is a point along an edge
         self.car_type = car_type # 0 means car without area limitation, else means car with area limitation
         
@@ -50,8 +57,19 @@ class Car:
                 self.destination = get_next_destination(self.destination,previous_source, self.speed_vector, self.pos_list, self.adj_matrix_area)
 
             self.speed_vector = get_cordinate_by_node(self.destination,self.pos_list) - get_cordinate_by_node(self.source,self.pos_list) #update speed
-            self.speed_vector = self.speed_vector/ np.linalg.norm(self.speed_vector)*self.speed
-            self.current_position = get_cordinate_by_node(self.source, self.pos_list) +  self.speed_vector*residual_time
+
+            # if np.linalg.norm(self.speed_vector) == 0:
+            #     print("The car is stuck, resetting speed vector.")
+            #     # self.speed_vector = np.array([1, 0])
+            # self.speed_vector = self.speed_vector/ np.linalg.norm(self.speed_vector)*self.speed
+            # self.current_position = get_cordinate_by_node(self.source, self.pos_list) +  self.speed_vector*residual_time
+            norm = np.linalg.norm(self.speed_vector)
+            if norm == 0:
+                self.speed_vector = np.zeros_like(self.speed_vector)
+            else:
+                self.speed_vector = self.speed_vector / norm * self.speed
+            self.current_position = get_cordinate_by_node(self.source, self.pos_list) + self.speed_vector * residual_time
+            
         else:
             self.current_position = self.current_position +  self.speed_vector*time
 
@@ -115,6 +133,10 @@ def cosine_similarity(vec1,vec2):
     norm_vector1 = np.linalg.norm(vec1)
     norm_vector2 = np.linalg.norm(vec2)
     # Calculate cosine similarity
+    if norm_vector1 == 0 or norm_vector2 == 0:
+        print("One of the vectors is zero, returning 0.0")
+        return 0.0  # Trả về 0 nếu vector có độ dài 0
+    
     return dot_product / (norm_vector1 * norm_vector2)
 
 def generate_roadNet_pair_area_list( exp_dir, num_car, num_round, circle_radius = 100, step_time = 60, speed = 13.59,  County = 'New York', num_area = 10, car_type_list = [0]*100 ):
