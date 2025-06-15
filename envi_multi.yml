@@ -1,0 +1,52 @@
+name: envi_multi
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - scipy
+  - seaborn
+  - geopandas
+  - folium
+  - gdal
+  - shapely
+  - fiona
+  - pyproj
+  - rtree
+  - hdf5
+  - h5py
+  - openjpeg
+  - tqdm
+  - joblib
+  - click
+  - jinja2
+  - requests
+  - typing-extensions
+  - pip:
+      # - torch==2.3.0+cu118
+      # - torchvision==0.18.0+cu118
+      # - torchaudio==2.3.0+cu118
+      - triton==2.3.0
+      - nvidia-cublas-cu11==11.11.3.6
+      - nvidia-cuda-runtime-cu11==11.8.89
+      - nvidia-cudnn-cu11==8.7.0.84
+      - nvidia-cufft-cu11==10.9.0.58
+      - nvidia-curand-cu11==10.3.0.86
+      - nvidia-cusolver-cu11==11.4.1.48
+      - nvidia-cusparse-cu11==11.7.5.86
+      - nvidia-nccl-cu11==2.20.5
+      - nvidia-nvtx-cu11==11.8.86
+      - cvxpy
+      - clarabel
+      - ecos
+      - osqp
+      - qdldl
+      - scs
+      - sympy
+      - networkx
+      - pillow

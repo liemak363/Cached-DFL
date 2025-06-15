@@ -1,0 +1,25 @@
+general:
+  num_agents: 100
+  global_epochs: 50
+  communication_interval: 120
+
+training:
+  local_updates: 10
+  learning_rate: 0.1
+  batch_size: 64
+  staleness_tolerance: 10
+  cache_size: 10
+  regularization: 0.01
+  early_stopping_patience: 20
+
+mobility:
+  vehicle_speed: 13.89
+  communication_distance: 100
+
+dataset:
+  name: "MNIST"
+  distribution: "non_iid"
+  distribution_type: "uneven_shards"
+
+model:
+  architecture: "CNN"

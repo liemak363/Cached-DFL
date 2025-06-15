@@ -35,7 +35,7 @@ from model import CNNMnist, CNNFashion_Mnist, ResNet18
 
 from data_loader import (
     get_mnist_iid, get_mnist_area, get_mnist_dirichlet, get_mnist_non_iid,
-    get_cifar10_iid,  get_cifar10_dirichlet, get_cifar10_non_iid
+    get_cifar10_iid,  get_cifar10_dirichlet, get_cifar10_non_iid,
     get_fashionmnist_area, get_fashionmnist_iid,  get_fashionmnist_dirichlet, get_fashionmnist_non_iid
 )
 from road_sim import generate_roadNet_pair_area_list
@@ -47,6 +47,8 @@ Randomseed = seed_setter.set_seed()
 # Check CUDA availability
 cuda_available = torch.cuda.is_available()
 print("CUDA Available:", cuda_available)
+print("CUDA Version:", torch.version.cuda)
+print("PyTorch Version:", torch.__version__)
 device = torch.device("cuda" if cuda_available else "cpu")
 
 np.set_printoptions(precision=4, suppress=True)
@@ -59,12 +61,12 @@ parser = argparse.ArgumentParser(description="Single-thread trainer script")
 # Basic arguments
 parser.add_argument("--suffix", type=str, default="", help="Suffix in the folder")
 parser.add_argument("--note", type=str, default="N/A", help="Special notes")
-parser.add_argument("--task", type=str, choices=['mnist', 'fashionmnist', 'cifar10', 'harbox'],
+parser.add_argument("--task", type=str, default='fashionmnist', choices=['mnist', 'fashionmnist', 'cifar10', 'harbox'],
                     help="Dataset task to run")
 parser.add_argument("--local_ep", type=int, default=10, help="Number of local epochs")
 parser.add_argument("--lr", type=float, default=0.1, help="Learning rate")
 parser.add_argument("--alpha", type=float, default=0.5, help="Dirichlet alpha for non-iid data")
-parser.add_argument("--distribution", type=str, choices=['iid', 'non-iid', 'dirichlet','area'],
+parser.add_argument("--distribution", type=str, default='area', choices=['iid', 'non-iid', 'dirichlet','area'],
                     help="Choose data distribution")
 parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
 parser.add_argument("--hidden_size", type=int, default=200, help="Hidden layer size (if applicable)")
@@ -89,7 +91,7 @@ parser.add_argument("--weighted_aggregation", action='store_true', help="Enable 
 parser.add_argument('--no-weighted_aggregation', dest='weighted_aggregation', action='store_false')
 parser.set_defaults(weighted_aggregation=True)
 
-parser.add_argument("--algorithm", type=str, choices=[
+parser.add_argument("--algorithm", type=str, default='cache', choices=[
     'ml', 'cfl', 'dfl',  'cache', 'test', 'test_area', 'test_area_GB'
 ], help="Algorithm to run")
 
@@ -498,8 +500,8 @@ def Decentralized_Cache_process(suffix_dir,train_loader,test_loader,num_round,lo
     for i in range(num_car):
         model.append(copy.deepcopy(global_model).to(device))
         local_cache.append({})
-        optimizer[i] = optim.SGD(params=model[j].parameters(), lr=learning_rate)
-        scheduler[i] = ReduceLROnPlateau(optimizer[j], mode='max', factor=args.lr_factor, patience=args.lr_patience, verbose=False)
+        optimizer[i] = optim.SGD(params=model[i].parameters(), lr=learning_rate)
+        scheduler[i] = ReduceLROnPlateau(optimizer[i], mode='max', factor=args.lr_factor, patience=args.lr_patience, verbose=False)
         acc_global.append([])
         class_acc_list.append([])
         acc_local.append([])
@@ -822,20 +824,20 @@ if __name__ == '__main__':
     special_notes = args.note
 
 
-    task = 'fashionmnist'
-    distribution = 'area'
-    args.algorithm = 'test_area_GB'
-    # distribution = 'iid'
-    # args.algorithm = 'test_mixing'
-    # args.algorithm = 'cache'
-    cache_size = 3
-    kick_out = True
-    args.kick_out = 5
-    if distribution == 'area':
-        kick_out = False
-    args.epoch_time = 120
-    num_car = 100
-    num_round = 1000
+    # task = 'fashionmnist'
+    # distribution = 'area'
+    # args.algorithm = 'test_area_GB'
+    # # distribution = 'iid'
+    # # args.algorithm = 'test_mixing'
+    # # args.algorithm = 'cache'
+    # cache_size = 3
+    # kick_out = True
+    # args.kick_out = 5
+    # if distribution == 'area':
+    #     kick_out = False
+    # args.epoch_time = 120
+    # num_car = 100
+    # num_round = 1000
 
     balance = False
     test_ratio = 0.1

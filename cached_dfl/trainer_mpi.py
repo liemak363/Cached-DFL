@@ -42,7 +42,7 @@ from model import CNNMnist, CNNFashion_Mnist, ResNet18
 
 from data_loader import (
     get_mnist_iid, get_mnist_area, get_mnist_dirichlet, get_mnist_non_iid,
-    get_cifar10_iid,  get_cifar10_dirichlet, get_cifar10_non_iid
+    get_cifar10_iid,  get_cifar10_dirichlet, get_cifar10_non_iid,
     get_fashionmnist_area, get_fashionmnist_iid,  get_fashionmnist_dirichlet, get_fashionmnist_non_iid
 )
 from road_sim import generate_roadNet_pair_area_list
@@ -60,12 +60,12 @@ parser = argparse.ArgumentParser(description="Configure script parameters and se
 # Add arguments
 parser.add_argument("--suffix", type=str, default="", help="Suffix in the folder")
 parser.add_argument("--note", type=str, default="N/A", help="Special_notes")
-parser.add_argument("--task", type=str, choices=[
+parser.add_argument("--task", type=str, default='mnist', choices=[
     'mnist', 'fashionmnist', 'cifar10','cifar100','harbox'], help="Choose dataset task to run")
 parser.add_argument("--local_ep", type=int, default=1, help="Number of local epochs")
 parser.add_argument("--lr", type=float, default=0.1, help="Learning rate")
 parser.add_argument("--alpha", type=float, default=0.5, help="Alpha for Dirchlet distribution, lower alpha increases heterogeneity")
-parser.add_argument("--distribution", type=str, choices=[
+parser.add_argument("--distribution", type=str, default='non-iid', choices=[
     'iid', 'non-iid','dirichlet','area'], help="Choose data distirbution")
 parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
 parser.add_argument("--num_round", type=int, default=1000, help="Number of rounds")
@@ -85,7 +85,7 @@ parser.add_argument("--County", type=str, default="New York", help="County")
 parser.add_argument("--weighted_aggregation", action='store_true', help="Enable weighted aggregation")
 parser.add_argument('--no-weighted_aggregation', dest='weighted_aggregation', action='store_false')
 parser.set_defaults(weighted_aggregation=True)
-parser.add_argument("--algorithm", type=str, choices=[
+parser.add_argument("--algorithm", type=str, default='cache', choices=[
     'ml', 'cfl', 'dfl', 'cache', 'cache_areas_LRU','cache_areas_GB'
 ], help="Choose the algorithm to run")
 # Parse arguments
